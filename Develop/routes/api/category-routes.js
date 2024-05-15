@@ -5,7 +5,7 @@ const { Category, Product } = require('../../models');
 
 router.get('/', async (req, res) => {
   try {
-   const catData = await Category.findAll();
+   const catData = await Category.findAll({include: [{ model: Product }] });
    if(!catData){
     res.status(404).json({ message: 'No categories stored!' });
       return;
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const catData = await Category.findByPk(req.params.id);
+    const catData = await Category.findByPk(req.params.id, {include: [{model:Product}]});
     if(!catData){
       res.status(404).json({ message: 'No categories stored!' });
         return;
