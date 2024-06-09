@@ -12,17 +12,9 @@ Tag.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    tag_name: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    product_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'product',
-        key: 'id',
-        unique: false
-      },
+      allowNull: false
     },
     // define columns
   },
