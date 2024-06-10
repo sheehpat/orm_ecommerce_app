@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     }
     res.json(prodData);
   } catch (error) {
-    res.status(500).json(err);
+    res.status(500).json(error);
   }
   // find all products
   // be sure to include its associated Category and Tag data
@@ -53,26 +53,16 @@ router.post('/', async (req, res) => {
       tagIds: [1, 2, 3, 4]
     }
   */
-  Product.create(req.body)
-    .then((product) => {
-      // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      if (req.body.tagIds.length) {
-        const productTagIdArr = req.body.tagIds.map((tag_id) => {
-          return {
-            product_id: product.id,
-            tag_id,
-          };
-        });
-        return ProductTag.bulkCreate(productTagIdArr);
+    try {
+      const product = await Product.create(req.body);
+      if(!req.body.tag_id){
+        res.status(200).json(product)
       }
-      // if no product tags, just respond
-      res.status(200).json(product);
-    })
-    .then((productTagIds) => res.status(200).json(productTagIds))
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json(err);
-    });
+
+    } catch (error) {
+      console.log(error);
+      res.status(400).json(error);
+    } 
 });
 
 // update product
